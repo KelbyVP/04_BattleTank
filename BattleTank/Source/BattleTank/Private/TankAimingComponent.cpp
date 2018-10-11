@@ -2,6 +2,8 @@
 
 #include "TankAimingComponent.h"
 #include "Engine./World.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
 
 
 // Sets default values for this component's properties
@@ -14,6 +16,10 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
+{
+	Barrel = BarrelToSet;
+}
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
@@ -34,11 +40,30 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 }
 
-void UTankAimingComponent::AimAt(FVector WorldSpaceAim)
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
+	if (!Barrel) { return; }
+	FVector TossVelocity;
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
-	auto OurTankName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s is pointing at Hit Location: %s"), *OurTankName, *WorldSpaceAim.ToString());
+	// Calculate the TossVelocity
+	if (UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		OUT TossVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace))
+	{
+		auto AimDirection = TossVelocity.GetSafeNormal();
+		auto TankName = GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *TankName, *AimDirection.ToString())
+	}
+	else return;
+
 }
 
 
