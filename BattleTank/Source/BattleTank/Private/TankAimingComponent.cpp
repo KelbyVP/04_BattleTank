@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Engine./World.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SceneComponent.h"
@@ -17,6 +18,11 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
 	Barrel = BarrelToSet;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
+{
+	Turret = TurretToSet;
+}
+
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
 		// figure out how far off the barrel is from where we want it to be (current barrel rotation vs AimDirection)
@@ -26,7 +32,15 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 		Barrel->Elevate(DeltaRotator.Pitch);
 }
+void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
+{
+	// figure out how far off the barrel is from where we want it to be (current barrel rotation vs AimDirection)
+	auto TurretRotator = Turret->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - TurretRotator;
 
+	Turret->Rotate(DeltaRotator.Yaw);
+}
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
@@ -50,6 +64,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	{
 		auto AimDirection = TossVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);		
+		MoveTurretTowards(AimDirection);
 		auto Time = GetWorld()->GetTimeSeconds();
 		UE_LOG(LogTemp, Warning, TEXT("%f: Aim Solution Found"), Time);
 
@@ -60,6 +75,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		UE_LOG(LogTemp, Warning, TEXT("%f: No Aim Solution Found"), Time);
 
 	}
+
 }
 
 
