@@ -15,7 +15,7 @@ class BATTLETANK_API UTankTurret : public UStaticMeshComponent
 	GENERATED_BODY()
 private:
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float MaxDegreesPerSecond = 15;
+		float MaxDegreesPerSecond = 25;
 public:
 	// -1 is max counterclockwise movement, and +1 is max clockwise movement
 	void Rotate(float RelativeSpeed);
