@@ -22,9 +22,9 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 		// figure out how far off the barrel is from where we want it to be (current barrel rotation vs AimDirection)
 		auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 		auto AimAsRotator = AimDirection.Rotation();
-		auto DeltaRotation = AimAsRotator - BarrelRotator;
+		auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-		Barrel->Elevate(5);
+		Barrel->Elevate(DeltaRotator.Pitch);
 }
 
 
@@ -41,12 +41,18 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		StartLocation,
 		HitLocation,
 		LaunchSpeed,
-		ESuggestProjVelocityTraceOption::DoNotTrace));
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace)); // parameter must be present to prevent bug
 
 	if (bHaveAimSolution)
 	{
 		auto AimDirection = TossVelocity.GetSafeNormal();
-		MoveBarrelTowards(AimDirection);
+		MoveBarrelTowards(AimDirection);		
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: Aim Solution Found"), Time);
+
 	}
 	else
 	{
