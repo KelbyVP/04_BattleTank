@@ -3,12 +3,6 @@
 #include "TankPlayerController.h"
 #include "BattleTank.h"
 
-
-
-
-
-	
-
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
