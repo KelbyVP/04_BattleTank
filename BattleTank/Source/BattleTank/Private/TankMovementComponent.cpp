@@ -6,23 +6,22 @@
 
 void UTankMovementComponent::Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
-	if (!LeftTrackToSet || !RightTrackToSet) { return; }
 	LeftTrack = LeftTrackToSet;
 	RightTrack = RightTrackToSet;
 }
 
 void UTankMovementComponent::IntendMoveFoward(float Throw)
 {
-
-	//auto Time = GetWorld->GetTimeSeconds();
-	auto Name = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s intends move forward at throw = %f"), *Name, Throw);
-
+	if (!LeftTrack || !RightTrack) { return; }
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
+}
 
-	// TODO preventg double-speed due to control using both stick and shoulder buttons
-	
+void UTankMovementComponent::IntendTurnRight(float Throw)
+{
+	if (!LeftTrack || !RightTrack) { return; }
+	LeftTrack->SetThrottle(Throw);
+	RightTrack->SetThrottle(-Throw);
 }
 
 
