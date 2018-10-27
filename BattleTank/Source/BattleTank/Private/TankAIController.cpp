@@ -13,7 +13,6 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("DONKEY:  C++ Begin Play called for Tank AI Controller"))
 
 }
 
