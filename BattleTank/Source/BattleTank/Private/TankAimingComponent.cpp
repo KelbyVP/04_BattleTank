@@ -21,10 +21,25 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::TickComponent(float DeltaTimje, enum ELevelTick TickTykpe, FActorComponentTickFunction *ThisTickFunction)
 {
-	if ((FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds)
+	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		FiringStatus = EFiringState::Reloading;
 	}
+	else if (IsBarrelMoving())
+	{
+		FiringStatus = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringStatus = EFiringState::Locked;
+	}
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+	auto BarrelVector = Barrel->GetForwardVector();
+	return !(BarrelVector.Equals(AimDirection, .01));
 }
 
 
@@ -75,7 +90,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 	if (bHaveAimSolution)
 	{
-		auto AimDirection = TossVelocity.GetSafeNormal();
+		AimDirection = TossVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);		
 		MoveTurretTowards(AimDirection);
 	}
