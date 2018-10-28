@@ -13,6 +13,11 @@ UTankAimingComponent::UTankAimingComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+EFiringState UTankAimingComponent::GetFiringState() const
+{
+	return FiringStatus;
+}
+
 void UTankAimingComponent::BeginPlay()
 {
 	// So that first fire is after initial reload
@@ -64,9 +69,11 @@ void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 	if (!ensure(Turret)) { return; }
 	// figure out how far off the barrel is from where we want it to be (current barrel rotation vs AimDirection)
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
-	auto AimAsRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimAsRotator - TurretRotator;
-
+	auto AimAtRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAtRotator - TurretRotator;
+	if (FMath::Abs(DeltaRotator.Yaw) > 180) {
+		DeltaRotator.Yaw = -(360-DeltaRotator.Yaw);
+	}
 	Turret->Rotate(DeltaRotator.Yaw);
 }
 
@@ -112,5 +119,6 @@ void UTankAimingComponent::Fire()
 		LastFireTime = FPlatformTime::Seconds();
 	}
 }
+
 
 
