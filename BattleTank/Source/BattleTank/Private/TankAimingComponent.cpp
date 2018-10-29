@@ -18,6 +18,11 @@ EFiringState UTankAimingComponent::GetFiringState() const
 	return FiringStatus;
 }
 
+int UTankAimingComponent::GetRoundsLeft() const
+{
+	return RoundsLeft;
+}
+
 void UTankAimingComponent::BeginPlay()
 {
 	// So that first fire is after initial reload
@@ -26,7 +31,8 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTykpe, FActorComponentTickFunction *ThisTickFunction)
 {
-	if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	if (RoundsLeft <= 0) { FiringStatus = EFiringState::OutOfAmmo; }
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
 		FiringStatus = EFiringState::Reloading;
 	}
@@ -105,9 +111,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 void UTankAimingComponent::Fire()
 {
-
-
-	if (FiringStatus != EFiringState::Reloading) {
+	if (FiringStatus == EFiringState::Aiming || FiringStatus == EFiringState::Locked) {
 		if (!ensure(Barrel)) { return; }
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
@@ -117,6 +121,7 @@ void UTankAimingComponent::Fire()
 
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
+		RoundsLeft--;
 	}
 }
 
