@@ -4,6 +4,7 @@
 
 #include "AIController.h"
 #include "CoreMinimal.h"
+#include "Tank.h"
 #include "TankAIController.generated.h"
 
 /**
@@ -17,7 +18,15 @@ class BATTLETANK_API ATankAIController : public AAIController
 private:
 
 	virtual void BeginPlay() override;
+
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+		void OnPossessedTankDeath();
+
+
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float AcceptanceRadius = 8000; // sets how close the AI tank gets to the player before stopping

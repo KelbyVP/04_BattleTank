@@ -2,8 +2,6 @@
 
 #pragma once
 
-
-
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
@@ -31,6 +29,8 @@ private:
 
 	virtual void BeginPlay() override;
 
+	virtual void SetPawn(APawn* InPawn) override;
+
 	virtual void Tick(float DeltaTime) override;
 	
 	//starts the tank moving the barrel so that a shot would hit 
@@ -43,4 +43,7 @@ private:
 	bool GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection) const;
 
 	bool GetLookVectorHitLocation(FVector const LookDirection, FVector &HitLocation) const;
+
+	UFUNCTION()
+		void OnTankDeath();
 };
