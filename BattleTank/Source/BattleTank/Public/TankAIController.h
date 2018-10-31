@@ -26,11 +26,6 @@ private:
 	UFUNCTION()
 		void OnPossessedTankDeath();
 
-
-
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float AcceptanceRadius = 8000; // sets how close the AI tank gets to the player before stopping
-
-
-	
 };

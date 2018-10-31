@@ -15,6 +15,7 @@ class BATTLETANK_API ATank : public APawn
 {
 	GENERATED_BODY()
 		ATank();
+	virtual void BeginPlay() override;
 
 
 public:
@@ -35,7 +36,7 @@ private:
 	int32 StartingHealth = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-	int32 CurrentHealth = StartingHealth;
+	int32 CurrentHealth;
 	
 
 

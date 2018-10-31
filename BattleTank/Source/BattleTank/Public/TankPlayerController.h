@@ -29,7 +29,7 @@ private:
 
 	virtual void BeginPlay() override;
 
-	virtual void SetPawn(APawn* InPawn) override;
+	void SetPawn(APawn* InPawn);
 
 	virtual void Tick(float DeltaTime) override;
 	
@@ -47,5 +47,4 @@ private:
 	UFUNCTION()
 		void OnTankDeath();
 
-	void StartSpectatingOnly();
 };
