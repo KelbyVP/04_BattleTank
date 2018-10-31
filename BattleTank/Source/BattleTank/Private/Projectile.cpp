@@ -4,6 +4,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
+#include "Public/TimerManager.h"
 
 
 
@@ -49,12 +50,17 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 
 
 	SetRootComponent(ImpactBlast);
-	//Delete();
+	CollisionMesh->DestroyComponent();
+
+	FTimerHandle Timer;
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
 
 }
 
-// Called every frame
-
+void AProjectile::OnTimerExpire()
+{
+	Destroy();
+}
 
 void AProjectile::LaunchProjectile(float Speed)
 {
