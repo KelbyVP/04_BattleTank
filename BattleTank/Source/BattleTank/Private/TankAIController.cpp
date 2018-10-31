@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "AIController.h"
 #include "TankAimingComponent.h"
+#include "GameFramework/Pawn.h"
 
 void ATankAIController::BeginPlay()
 {
@@ -24,7 +25,7 @@ void ATankAIController::SetPawn(APawn * InPawn)
 
 void ATankAIController::OnPossessedTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AI Tank is Dead!"))
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
 
 // Tick (called every frame)

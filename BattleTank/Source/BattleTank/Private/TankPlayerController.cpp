@@ -28,7 +28,7 @@ void ATankPlayerController::SetPawn(APawn * InPawn)
 
 void ATankPlayerController::OnTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Player Tank Dead!"))
+	StartSpectatingOnly();
 }
 
 // Tick
@@ -100,6 +100,11 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector &
 		ScreenLocation.Y, 
 		CameraWorldLocation, 
 		LookDirection);
+}
+
+void ATankPlayerController::StartSpectatingOnly()
+{
+
 }
 
 
