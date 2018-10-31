@@ -28,3 +28,11 @@ float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const &DamageEve
 	}
 	return DamageToApply;
 }
+
+float ATank::GetHealthPercent() const
+{
+	//returns current health as a percentage of starting health between 0 and 1
+	UFUNCTION(BlueprintPure, Category = "Health")
+	return (float)CurrentHealth/(float)StartingHealth;
+
+}
