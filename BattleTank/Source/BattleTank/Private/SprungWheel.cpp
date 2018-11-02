@@ -33,7 +33,7 @@ void ASprungWheel::BeginPlay()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("NotNull"))
+		UE_LOG(LogTemp, Warning, TEXT("NotNull %s"), *GetAttachParentActor()->GetName())
 	}
 }
 
