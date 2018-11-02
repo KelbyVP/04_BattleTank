@@ -25,6 +25,7 @@ int32 UTankAimingComponent::GetRoundsLeft() const
 
 void UTankAimingComponent::BeginPlay()
 {
+	Super::BeginPlay();
 	// So that first fire is after initial reload
 	LastFireTime = FPlatformTime::Seconds();
 }
@@ -70,12 +71,12 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 		Barrel->Elevate(DeltaRotator.Pitch);
 }
-void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
+void UTankAimingComponent::MoveTurretTowards(FVector TargetAimDirection)
 {
 	if (!ensure(Turret)) { return; }
 	// figure out how far off the barrel is from where we want it to be (current barrel rotation vs AimDirection)
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
-	auto AimAtRotator = AimDirection.Rotation();
+	auto AimAtRotator = TargetAimDirection.Rotation();
 	auto DeltaRotator = AimAtRotator - TurretRotator;
 	if (FMath::Abs(DeltaRotator.Yaw) > 180) {
 		DeltaRotator.Yaw = -(360-DeltaRotator.Yaw);
